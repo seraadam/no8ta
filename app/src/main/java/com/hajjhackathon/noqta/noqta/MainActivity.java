@@ -34,13 +34,14 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class MainActivity extends AppCompatActivity {
+    DatabaseReference database;
     public static final int requestPermissionID = 101;
     Context mcontext;
     CameraSource visioncam;
     SurfaceView CameraView;
     TextView errortext;
 
-    DatabaseReference database;
+
 
 
 
@@ -188,32 +189,31 @@ public class MainActivity extends AppCompatActivity {
                                     Log.e("TextBlock item ", item.toString());
                                     stringBuilder.append(item.getValue());
                                     Log.e("TextBlock getValue ", item.getValue().toString());
-                                   //stringBuilder.append("\n");
+                                    //stringBuilder.append("\n");
                                     Log.e("TextBlock stringBui", stringBuilder.toString());
-                                    //preg_match_all('/\b([A-Z]{3}\s?(\d{3}|\d{2}|d{1})\s?[A-Z])|([A-Z]\s?(\d{3}|\d{2}|\d{1})\s?[A-Z]{3})|(([A-HK-PRSVWY][A-HJ-PR-Y])\s?([0][2-9]|[1-9][0-9])\s?[A-HJ-PR-Z]{3})\b/', $subject, $result, PREG_PATTERN_ORDER);
-                                }
+                                   }
 
                                 String plateNumber=stringBuilder.toString().replaceAll("\\s+","");
                                 if(checkPlateNumber(plateNumber)){
                                     //search in the database
                                     errortext.setText(stringBuilder.toString());
 
-
-                                    String plate = stringBuilder.toString();
+                                    String plate = plateNumber;
                                     database.child("transport").child(plate).child("permissionno").setValue("12347890");
+                                    Log.e("firebase",database.child("transport").child(plate).child("permissionno").setValue("12347890").toString());
                                     database.child("transport").child(plate).child("makkahentrydate").setValue("3-9-2018");
                                     database.child("transport").child(plate).child("arafatentriesno").setValue("5");
                                     database.child("transport").child(plate).child("minaentriesno").setValue("9");
                                     database.child("transport").child(plate).child("cartype").setValue("bus");
 
-                                    String transportorder = database.child("orders").push().getKey();
-                                    database.child("order").child(transportorder).child("fromarea").setValue("Al-azizia");
-                                    database.child("order").child(transportorder).child("toarea").setValue("Arafat");
-                                    database.child("order").child(transportorder).child("ordertime").setValue("10:00pm");
-                                    database.child("order").child(transportorder).child("drivername").setValue("Mohammed Khan");
-                                    database.child("order").child(transportorder).child("driverID").setValue("20009111098");
-                                    database.child("order").child(transportorder).child("plateno").setValue(plate);
-                                    database.child("order").child(transportorder).child("companyname").setValue("مؤسسة صالح شاهر الزيني");
+//                                    String transportorder = database.child("orders").push().getKey();
+//                                    database.child("order").child(transportorder).child("fromarea").setValue("Al-azizia");
+//                                    database.child("order").child(transportorder).child("toarea").setValue("Arafat");
+//                                    database.child("order").child(transportorder).child("ordertime").setValue("10:00pm");
+//                                    database.child("order").child(transportorder).child("drivername").setValue("Mohammed Khan");
+//                                    database.child("order").child(transportorder).child("driverID").setValue("20009111098");
+//                                    database.child("order").child(transportorder).child("plateno").setValue(plate);
+//                                    database.child("order").child(transportorder).child("companyname").setValue("مؤسسة صالح شاهر الزيني");
 
                                     System.out.println("Done");
                                 }
