@@ -170,6 +170,9 @@ public static final int requestPermissionID = 101;
                                 }
                                 errortext.setText(stringBuilder.toString());
 
+                                String plate = "888 LTB";
+
+
                             }
                         });
                     }
