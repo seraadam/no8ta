@@ -161,10 +161,15 @@ public static final int requestPermissionID = 101;
                                 StringBuilder stringBuilder = new StringBuilder();
                                 for (int i = 0; i < items.size(); i++) {
                                     TextBlock item = items.valueAt(i);
+                                    Log.e("TextBlock item " , item.toString());
                                     stringBuilder.append(item.getValue());
+                                    Log.e("TextBlock getValue " , item.getValue().toString());
                                     stringBuilder.append("\n");
+                                    Log.e("TextBlock stringBui" , stringBuilder.toString());
+                                    //preg_match_all('/\b([A-Z]{3}\s?(\d{3}|\d{2}|d{1})\s?[A-Z])|([A-Z]\s?(\d{3}|\d{2}|\d{1})\s?[A-Z]{3})|(([A-HK-PRSVWY][A-HJ-PR-Y])\s?([0][2-9]|[1-9][0-9])\s?[A-HJ-PR-Z]{3})\b/', $subject, $result, PREG_PATTERN_ORDER);
                                 }
                                 errortext.setText(stringBuilder.toString());
+
                             }
                         });
                     }
