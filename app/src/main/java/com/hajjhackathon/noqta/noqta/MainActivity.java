@@ -22,6 +22,8 @@ import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.Detector;
 import com.google.android.gms.vision.text.TextBlock;
 import com.google.android.gms.vision.text.TextRecognizer;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.IOException;
 
@@ -31,7 +33,11 @@ public class MainActivity extends AppCompatActivity {
     SurfaceView CameraView;
     TextView errortext;
 
-public static final int requestPermissionID = 101;
+    DatabaseReference myRef;
+    final FirebaseDatabase database = FirebaseDatabase.getInstance();
+
+
+    public static final int requestPermissionID = 101;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +49,10 @@ public static final int requestPermissionID = 101;
         CameraView = (SurfaceView) findViewById(R.id.surfaceView);
         errortext= (TextView) findViewById(R.id.error);
 
-       // if (checkCameraHardware(mcontext)) {
+
+
+
+        // if (checkCameraHardware(mcontext)) {
             ImageDetection(true);
 
      //   }
@@ -171,7 +180,8 @@ public static final int requestPermissionID = 101;
                                 errortext.setText(stringBuilder.toString());
 
                                 String plate = "888 LTB";
-
+                                myRef = database.getReference("Buses").child(plate).child("Driver");
+                                
 
                             }
                         });
