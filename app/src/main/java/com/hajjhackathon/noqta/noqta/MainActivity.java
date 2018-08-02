@@ -22,22 +22,21 @@ import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.Detector;
 import com.google.android.gms.vision.text.TextBlock;
 import com.google.android.gms.vision.text.TextRecognizer;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity {
+    public static final int requestPermissionID = 101;
     Context mcontext;
     CameraSource visioncam;
     SurfaceView CameraView;
     TextView errortext;
-
-    DatabaseReference myRef;
-    final FirebaseDatabase database = FirebaseDatabase.getInstance();
-
-
-    public static final int requestPermissionID = 101;
+    DatabaseReference database;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,15 +46,15 @@ public class MainActivity extends AppCompatActivity {
         mcontext = getApplication();
 
         CameraView = (SurfaceView) findViewById(R.id.surfaceView);
-        errortext= (TextView) findViewById(R.id.error);
+        errortext = (TextView) findViewById(R.id.error);
 
-
+        database = FirebaseDatabase.getInstance().getReference();
 
 
         // if (checkCameraHardware(mcontext)) {
-            ImageDetection(true);
+        ImageDetection(true);
 
-     //   }
+        //   }
 
     }
 
@@ -170,18 +169,52 @@ public class MainActivity extends AppCompatActivity {
                                 StringBuilder stringBuilder = new StringBuilder();
                                 for (int i = 0; i < items.size(); i++) {
                                     TextBlock item = items.valueAt(i);
-                                    Log.e("TextBlock item " , item.toString());
+                                    Log.e("TextBlock item ", item.toString());
                                     stringBuilder.append(item.getValue());
-                                    Log.e("TextBlock getValue " , item.getValue().toString());
+                                    Log.e("TextBlock getValue ", item.getValue().toString());
                                     stringBuilder.append("\n");
-                                    Log.e("TextBlock stringBui" , stringBuilder.toString());
+                                    Log.e("TextBlock stringBui", stringBuilder.toString());
                                     //preg_match_all('/\b([A-Z]{3}\s?(\d{3}|\d{2}|d{1})\s?[A-Z])|([A-Z]\s?(\d{3}|\d{2}|\d{1})\s?[A-Z]{3})|(([A-HK-PRSVWY][A-HJ-PR-Y])\s?([0][2-9]|[1-9][0-9])\s?[A-HJ-PR-Z]{3})\b/', $subject, $result, PREG_PATTERN_ORDER);
                                 }
                                 errortext.setText(stringBuilder.toString());
 
-                                String plate = "888 LTB";
-                                myRef = database.getReference("Buses").child(plate).child("Driver");
-                                
+                                String plate = "888LTB";
+
+                                database.child("transport").child(plate).child("permissionno").setValue("12347890");
+                                database.child("transport").child(plate).child("makkahentrydate").setValue("3-9-2018");
+                                database.child("transport").child(plate).child("arafatentriesno").setValue("5");
+                                database.child("transport").child(plate).child("minaentriesno").setValue("9");
+                                database.child("transport").child(plate).child("cartype").setValue("bus");
+
+
+                                String transportorder = database.child("orders").push().getKey();
+                                database.child("order").child(transportorder).child("fromarea").setValue("Al-azizia");
+
+                                database.child("transport").child(transportorder).child("toarea").setValue("Arafat");
+
+                                database.child("transport").child(transportorder).child("ordertime").setValue("10:00pm");
+
+                                database.child("transport").child(transportorder).child("drivername").setValue("Mohammed Khan");
+
+                                database.child("transport").child(transportorder).child("driverID").setValue("20009111098");
+
+                                database.child("transport").child(transportorder).child("plateno").setValue(plate);
+
+                                database.child("transport").child(transportorder).child("companyname").setValue("مؤسسة صالح شاهر الزيني");
+
+
+//                                myRef.addValueEventListener(new ValueEventListener() {
+//                                    @Override
+//                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//
+//                                    }
+//
+//                                    @Override
+//                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//                                    }
+//                                });
+
 
                             }
                         });
