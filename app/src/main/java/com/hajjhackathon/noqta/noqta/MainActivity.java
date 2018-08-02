@@ -209,7 +209,9 @@ public class MainActivity extends AppCompatActivity {
                                                 if(val.getKey().contains(plateNumber)){
                                                     //Do what you want with the record
                                                     Log.e("found ", val.getKey());
-                                                }else Log.e("not found ", "not found");
+                                                }else { Log.e("not found ", "not found");
+                                                final MediaPlayer notAuthorised=MediaPlayer.create(MainActivity.this,R.raw.smoke);
+                                                notAuthorised.start();}
 
                                             }
                                         }
