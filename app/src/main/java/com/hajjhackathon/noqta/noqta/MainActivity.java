@@ -27,6 +27,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.io.IOException;
@@ -40,8 +41,7 @@ public class MainActivity extends AppCompatActivity {
     CameraSource visioncam;
     SurfaceView CameraView;
     TextView errortext;
-
-
+    transport t ;
 
 
 
@@ -66,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
         errortext = (TextView) findViewById(R.id.error);
 
         database = FirebaseDatabase.getInstance().getReference();
+
 
 
         // if (checkCameraHardware(mcontext)) {
@@ -193,18 +194,42 @@ public class MainActivity extends AppCompatActivity {
                                     Log.e("TextBlock stringBui", stringBuilder.toString());
                                    }
 
-                                String plateNumber=stringBuilder.toString().replaceAll("\\s+","");
+                                final String plateNumber=stringBuilder.toString().replaceAll("\\s+","");
                                 if(checkPlateNumber(plateNumber)){
                                     //search in the database
                                     errortext.setText(stringBuilder.toString());
 
-                                    String plate = plateNumber;
-                                    database.child("transport").child(plate).child("permissionno").setValue("12347890");
-                                    Log.e("firebase",database.child("transport").child(plate).child("permissionno").setValue("12347890").toString());
-                                    database.child("transport").child(plate).child("makkahentrydate").setValue("3-9-2018");
-                                    database.child("transport").child(plate).child("arafatentriesno").setValue("5");
-                                    database.child("transport").child(plate).child("minaentriesno").setValue("9");
-                                    database.child("transport").child(plate).child("cartype").setValue("bus");
+                                    DatabaseReference ref = database.child("transport");
+                                    ref.addValueEventListener(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                            for(DataSnapshot val : dataSnapshot.getChildren()){
+                                                //I am not sure what record are you specifically looking for
+                                                //This is if you are getting the Key which is the record ID for your Coupon Object
+                                                if(val.getKey().contains(plateNumber)){
+                                                    //Do what you want with the record
+                                                    Log.e("found ", val.getKey());
+                                                }else Log.e("not found ", "not found");
+
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+
+                                        }
+                                    });
+
+
+
+//                                    String plate = plateNumber;
+//                                    database.child("transport").child(plate).child("permissionno").setValue("12347890");
+//                                    Log.e("firebase",database.child("transport").child(plate).child("permissionno").setValue("12347890").toString());
+//                                    database.child("transport").child(plate).child("makkahentrydate").setValue("3-9-2018");
+//                                    database.child("transport").child(plate).child("arafatentriesno").setValue("5");
+//                                    database.child("transport").child(plate).child("minaentriesno").setValue("9");
+//                                    database.child("transport").child(plate).child("cartype").setValue("bus");
 
 //                                    String transportorder = database.child("orders").push().getKey();
 //                                    database.child("order").child(transportorder).child("fromarea").setValue("Al-azizia");
