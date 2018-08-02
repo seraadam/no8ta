@@ -178,7 +178,7 @@ public class MainActivity extends AppCompatActivity {
                                 }
                                 errortext.setText(stringBuilder.toString());
 
-                                String plate = "888LTB";
+                                String plate = "888 LTB";
 
                                 database.child("transport").child(plate).child("permissionno").setValue("12347890");
                                 database.child("transport").child(plate).child("makkahentrydate").setValue("3-9-2018");
@@ -189,18 +189,12 @@ public class MainActivity extends AppCompatActivity {
 
                                 String transportorder = database.child("orders").push().getKey();
                                 database.child("order").child(transportorder).child("fromarea").setValue("Al-azizia");
-
-                                database.child("transport").child(transportorder).child("toarea").setValue("Arafat");
-
-                                database.child("transport").child(transportorder).child("ordertime").setValue("10:00pm");
-
-                                database.child("transport").child(transportorder).child("drivername").setValue("Mohammed Khan");
-
-                                database.child("transport").child(transportorder).child("driverID").setValue("20009111098");
-
-                                database.child("transport").child(transportorder).child("plateno").setValue(plate);
-
-                                database.child("transport").child(transportorder).child("companyname").setValue("مؤسسة صالح شاهر الزيني");
+                                database.child("order").child(transportorder).child("toarea").setValue("Arafat");
+                                database.child("order").child(transportorder).child("ordertime").setValue("10:00pm");
+                                database.child("order").child(transportorder).child("drivername").setValue("Mohammed Khan");
+                                database.child("order").child(transportorder).child("driverID").setValue("20009111098");
+                                database.child("order").child(transportorder).child("plateno").setValue(plate);
+                                database.child("order").child(transportorder).child("companyname").setValue("مؤسسة صالح شاهر الزيني");
 
 
 //                                myRef.addValueEventListener(new ValueEventListener() {
