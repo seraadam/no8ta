@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.hardware.Camera;
+import android.media.MediaPlayer;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -26,18 +27,30 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.IOException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class MainActivity extends AppCompatActivity {
     Context mcontext;
     CameraSource visioncam;
     SurfaceView CameraView;
     TextView errortext;
-
     DatabaseReference myRef;
     final FirebaseDatabase database = FirebaseDatabase.getInstance();
 
 
     public static final int requestPermissionID = 101;
+
+
+
+    private boolean checkPlateNumber(String email) {
+        String regExpn =
+                "^(([0-9]{1,4}))[A-Z]{3}$";
+        Pattern pattern = Pattern.compile(regExpn, Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(email);
+        return matcher.matches();
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -177,7 +190,17 @@ public class MainActivity extends AppCompatActivity {
                                     Log.e("TextBlock stringBui" , stringBuilder.toString());
                                     //preg_match_all('/\b([A-Z]{3}\s?(\d{3}|\d{2}|d{1})\s?[A-Z])|([A-Z]\s?(\d{3}|\d{2}|\d{1})\s?[A-Z]{3})|(([A-HK-PRSVWY][A-HJ-PR-Y])\s?([0][2-9]|[1-9][0-9])\s?[A-HJ-PR-Z]{3})\b/', $subject, $result, PREG_PATTERN_ORDER);
                                 }
-                                errortext.setText(stringBuilder.toString());
+
+                                String plateNumber=stringBuilder.toString().replaceAll("\\s+","");
+                                if(checkPlateNumber(plateNumber)){
+                                    //search in the database
+                                    errortext.setText(stringBuilder.toString());
+                                    System.out.println("Done");
+                                }
+                                else{
+                                    //search for another test to check
+                                    System.out.println("Fail");
+                                }
 
                                 String plate = "888 LTB";
                                 myRef = database.getReference("Buses").child(plate).child("Driver");
