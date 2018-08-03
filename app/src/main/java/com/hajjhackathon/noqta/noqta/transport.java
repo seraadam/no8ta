@@ -6,16 +6,48 @@ public class transport {
     String makkahentrydate;
     String minaentriesno;
 
-    public transport() {
+    String order;
+    String drivername;
+    String driverid;
+
+    public String getOrder() {
+        return order;
     }
 
-    public transport(String arafatentriesno, String cartype, String makkahentrydate, String minaentriesno, String permissionno) {
+    public transport(String arafatentriesno, String cartype, String makkahentrydate, String minaentriesno, String order, String drivername, String driverid, String permissionno) {
         this.arafatentriesno = arafatentriesno;
         this.cartype = cartype;
         this.makkahentrydate = makkahentrydate;
         this.minaentriesno = minaentriesno;
+        this.order = order;
+        this.drivername = drivername;
+        this.driverid = driverid;
         this.permissionno = permissionno;
     }
+
+    public void setOrder(String order) {
+        this.order = order;
+    }
+
+    public String getDrivername() {
+        return drivername;
+    }
+
+    public void setDrivername(String drivername) {
+        this.drivername = drivername;
+    }
+
+    public String getDriverid() {
+        return driverid;
+    }
+
+    public void setDriverid(String driverid) {
+        this.driverid = driverid;
+    }
+
+    public transport() {
+    }
+
 
     public String getArafatentriesno() {
         return arafatentriesno;

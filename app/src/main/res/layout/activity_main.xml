@@ -18,6 +18,8 @@
     <RelativeLayout
         android:layout_width="300dp"
         android:layout_height="450dp"
+        android:id="@+id/details"
+        android:visibility="gone"
         android:background="@drawable/busdetailsbackground"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

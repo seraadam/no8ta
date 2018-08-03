@@ -16,6 +16,8 @@ import android.util.Log;
 import android.util.SparseArray;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.View;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,10 +43,8 @@ public class MainActivity extends AppCompatActivity {
     CameraSource visioncam;
     SurfaceView CameraView;
     TextView errortext;
-    transport t ;
-
-
-
+    transport tbus;
+RelativeLayout details;
 
     private boolean checkPlateNumber(String email) {
         String regExpn =
@@ -64,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
 
         CameraView = (SurfaceView) findViewById(R.id.surfaceView);
         errortext = (TextView) findViewById(R.id.error);
+        details = (RelativeLayout) findViewById(R.id.details);
 
         database = FirebaseDatabase.getInstance().getReference();
 
@@ -192,27 +193,45 @@ public class MainActivity extends AppCompatActivity {
                                     Log.e("TextBlock getValue ", item.getValue().toString());
                                     //stringBuilder.append("\n");
                                     Log.e("TextBlock stringBui", stringBuilder.toString());
-                                   }
+                                }
 
                                 final String plateNumber=stringBuilder.toString().replaceAll("\\s+","");
+
                                 if(checkPlateNumber(plateNumber)){
                                     //search in the database
+                                    details.setVisibility(View.VISIBLE);
                                     errortext.setText(stringBuilder.toString());
-
                                     DatabaseReference ref = database.child("transport");
                                     ref.addValueEventListener(new ValueEventListener() {
                                         @Override
                                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                            boolean flag= false;
+
                                             for(DataSnapshot val : dataSnapshot.getChildren()){
                                                 //I am not sure what record are you specifically looking for
                                                 //This is if you are getting the Key which is the record ID for your Coupon Object
-                                                if(val.getKey().contains(plateNumber)){
-                                                    //Do what you want with the record
+                                                if (val.getKey().contains(plateNumber)) {
+                                                    flag = true;
+                                                  //  Do what you want with the recordarafatentriesno:
                                                     Log.e("found ", val.getKey());
-                                                }else { Log.e("not found ", "not found");
-                                                final MediaPlayer notAuthorised=MediaPlayer.create(MainActivity.this,R.raw.smoke);
-                                                notAuthorised.start();}
+                                                    tbus = val.getValue(transport.class);
+                                                    Log.e("transport", tbus.getArafatentriesno()+"");
+                                                    Log.e("transport", tbus.getPermissionno()+"");
+                                                    Log.e("transport", tbus.getCartype()+"");
+                                                    Log.e("transport", tbus.getMakkahentrydate()+"");
+                                                    Log.e("transport", tbus.getMinaentriesno()+"");
+                                                    Log.e("transport", tbus.getDriverid()+"");
+                                                    Log.e("transport", tbus.getDrivername()+"");
+                                                    Log.e("transport", tbus.getOrder()+"");
+                                                }
 
+
+                                            }
+                                            if(flag==false){
+                                                final MediaPlayer notAuthorised = MediaPlayer.create(MainActivity.this, R.raw.smoke);
+
+                                                Log.e("not found ", "not found");
+                                                notAuthorised.start();
                                             }
                                         }
 
@@ -243,8 +262,7 @@ public class MainActivity extends AppCompatActivity {
 //                                    database.child("order").child(transportorder).child("companyname").setValue("مؤسسة صالح شاهر الزيني");
 
                                     System.out.println("Done");
-                                }
-                                else{
+                                } else {
                                     //search for another test to check
                                     System.out.println("Fail");
                                 }
