@@ -17,6 +17,7 @@ import android.util.SparseArray;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -42,9 +43,9 @@ public class MainActivity extends AppCompatActivity {
     Context mcontext;
     CameraSource visioncam;
     SurfaceView CameraView;
-    TextView errortext;
+    TextView errortext , cartypeinfo ,permissiontypeinfo,entrymakkahdateinfo ,arafatentrynoinfo;
     transport tbus;
-RelativeLayout details;
+    LinearLayout details;
 
     private boolean checkPlateNumber(String email) {
         String regExpn =
@@ -64,7 +65,15 @@ RelativeLayout details;
 
         CameraView = (SurfaceView) findViewById(R.id.surfaceView);
         errortext = (TextView) findViewById(R.id.error);
-        details = (RelativeLayout) findViewById(R.id.details);
+
+        cartypeinfo = (TextView) findViewById(R.id.cartypeinfo);
+        permissiontypeinfo = (TextView) findViewById(R.id.permissiontypeinfo);
+        entrymakkahdateinfo = (TextView) findViewById(R.id.entrymakkahdateinfo);
+        arafatentrynoinfo = (TextView) findViewById(R.id.arafatentrynoinfo);
+
+
+        details = (LinearLayout) findViewById(R.id.details);
+
 
         database = FirebaseDatabase.getInstance().getReference();
 
@@ -200,7 +209,7 @@ RelativeLayout details;
                                 if(checkPlateNumber(plateNumber)){
                                     //search in the database
                                     details.setVisibility(View.VISIBLE);
-                                    errortext.setText(stringBuilder.toString());
+                                   // errortext.setText(stringBuilder.toString());
                                     DatabaseReference ref = database.child("transport");
                                     ref.addValueEventListener(new ValueEventListener() {
                                         @Override
@@ -212,12 +221,17 @@ RelativeLayout details;
                                                 //This is if you are getting the Key which is the record ID for your Coupon Object
                                                 if (val.getKey().contains(plateNumber)) {
                                                     flag = true;
+                                                    details.setVisibility(View.VISIBLE);
+                                                    errortext.setText(plateNumber);
                                                   //  Do what you want with the recordarafatentriesno:
                                                     Log.e("found ", val.getKey());
                                                     tbus = val.getValue(transport.class);
                                                     Log.e("transport", tbus.getArafatentriesno()+"");
+                                                    ///cartypeinfo ,permissiontypeinfo,entrymakkahdateinfo ,arafatentrynoinfo
                                                     Log.e("transport", tbus.getPermissionno()+"");
                                                     Log.e("transport", tbus.getCartype()+"");
+                                                    cartypeinfo.setText(tbus.getCartype()+"");
+
                                                     Log.e("transport", tbus.getMakkahentrydate()+"");
                                                     Log.e("transport", tbus.getMinaentriesno()+"");
                                                     Log.e("transport", tbus.getDriverid()+"");
@@ -229,8 +243,8 @@ RelativeLayout details;
                                             }
                                             if(flag==false){
                                                 final MediaPlayer notAuthorised = MediaPlayer.create(MainActivity.this, R.raw.smoke);
-
-                                                Log.e("not found ", "not found");
+                                                Log.e("not found ", "not found"+ plateNumber);
+                                                details.setVisibility(View.GONE);
                                                 notAuthorised.start();
                                             }
                                         }
